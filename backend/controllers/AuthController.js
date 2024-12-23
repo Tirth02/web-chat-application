@@ -72,3 +72,27 @@ export const signup = async(request,response,next) =>{
         return response.status(500).send("Internal server error");
     }
 }
+
+export const getUserInfo = async(request,response,next) =>{
+    try {
+        const userData = await User.findById(request.userId);
+        if(!userData)
+        {
+            return response.status(404).send("User with the given id not found.");
+        }
+        
+        return response.status(200).json({
+            
+                id: userData.id,
+                email:userData.email,
+                profileSetup: userData.profileSetup,
+                firstName: userData.firstName,
+                lastName: userData.lastName,
+                image: userData.image,
+                color: userData.color,
+        });
+    } catch (error) {
+        console.log(error);
+        return response.status(500).send("Internal server error");
+    }
+}
