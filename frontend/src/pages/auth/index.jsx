@@ -8,11 +8,13 @@ import { toast } from "sonner";
 import { apiClient } from "@/lib/api-client";
 import { LOGIN_ROUTE, SIGNUP_ROUTE } from "@/utils/constants";
 import { useNavigate } from "react-router-dom";
+import { useAppStore } from "@/store";
 const Auth = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const navigate = useNavigate();
+  const {setUserInfo} = useAppStore();
   const validateLogin = () => {
     if (!email.length) {
       toast.error("Email is required");
@@ -49,6 +51,7 @@ const Auth = () => {
           { withCredentials: true }
         );
         if (response.data.user.id) {
+          setUserInfo(response.data.user);
           toast.success("Successfully Logged in!!");
           if (response.data.user.profileSetup) navigate("/chat");
           else navigate("/profile");
@@ -70,6 +73,7 @@ const Auth = () => {
       );
       if (response.status === 201) {
         toast.success("Account created successfully!!");
+        setUserInfo(response.data.user);
         navigate("/profile");
       }
       console.log({ response });
