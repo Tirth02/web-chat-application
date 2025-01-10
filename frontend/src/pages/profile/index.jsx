@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BrowserRouter, Route, Routes, useNavigate } from "react-router-dom";
 import Auth from "../auth";
 import { IoArrowBack } from "react-icons/io5";
@@ -8,20 +8,73 @@ import { FaTrash, FaPlus } from "react-icons/fa";
 import { colors, getColor } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
+import { apiClient } from "@/lib/api-client";
+import { UPDATE_PROFILE_ROUTE } from "@/utils/constants";
 const Profile = () => {
   const navigate = useNavigate();
-  const { userInfo } = useAppStore();
+  const { userInfo,setUserInfo } = useAppStore();
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [image, setImage] = useState("");
   const [hovered, setHovered] = useState("");
   const [selectedColor, setSelectedColor] = useState(0);
 
-  const saveChanges = async () => {};
+  useEffect(() =>{
+    if(userInfo.profileSetup)
+    {
+      setFirstName(userInfo.firstName);
+      setLastName(userInfo.lastName);
+      setSelectedColor(userInfo.color);
+    }
+  },[userInfo])
+ 
+  const validateProfile = () => {
+    if (!firstName) {
+      toast.error("First Name is required.");
+      return false;
+    }
+    if (!lastName) {
+      toast.error("Last Name is required.");
+      return false;
+    }
+    return true;
+  };
+  const saveChanges = async () => {
+    if (validateProfile()) {
+      try {
+        const response = await apiClient.post(
+          UPDATE_PROFILE_ROUTE,
+          { firstName, lastName, color: selectedColor },
+          { withCredentials: true }
+        );
+        if(response.status === 200 && response.data)
+        {
+          setUserInfo({...response.data});
+          toast.success("Profile updated successfully");
+          navigate("/chat");
+        }
+      } catch (error) {
+        toast.error(error);
+        console.log(error);
+      }
+    }
+  };
+
+  const handleNavigate = () =>{
+    if(userInfo.profileSetup)
+    {
+      navigate("/chat");
+    }
+    else
+    {
+      toast.error("Please setup profile.");
+    }
+  }
   return (
     <div className="bg-[#1b1c24] h-[100vh] flex items-center justify-center flex-col gap-10">
       <div className="flex flex-col gap-10 w-[80vw] md:w-max">
-        <div>
+        <div onClick={handleNavigate}>
           <IoArrowBack className="text-4xl lg:text-6xl text-white/90 cursor-pointer " />
         </div>
         <div className="grid grid-cols-2">
@@ -107,8 +160,8 @@ const Profile = () => {
         </div>
         <div className="w-full">
           <Button
-           className="h-14 w-full bg-purple-700 hover:bg-purple-900 transition-all duration-300"
-           onClick={saveChanges}
+            className="h-14 w-full bg-purple-700 hover:bg-purple-900 transition-all duration-300"
+            onClick={saveChanges}
           >
             Save Changes
           </Button>
