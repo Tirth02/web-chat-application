@@ -62,7 +62,7 @@ const Profile = () => {
           navigate("/chat");
         }
       } catch (error) {
-        toast.error(error);
+        toast.error(error.response.message);
         console.log(error);
       }
     }
