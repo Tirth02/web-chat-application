@@ -1,6 +1,7 @@
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { apiClient } from "@/lib/api-client";
+import { getColor } from "@/lib/utils";
 import { useAppStore } from "@/store";
 import { HOST, LOGIN_ROUTE, LOGOUT_ROUTE } from "@/utils/constants";
 import {FiEdit2} from "react-icons/fi";
