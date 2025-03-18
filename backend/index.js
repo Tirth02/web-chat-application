@@ -6,6 +6,7 @@ import mongoose from "mongoose";
 import connectDB from "./utils/db.js";
 import authRoutes from "./routes/AuthRoutes.js";
 import contactsRoutes from "./routes/ContactRoutes.js";
+import setupSocket from "./socket.js";
 
 dotenv.config();
 
@@ -28,4 +29,6 @@ const server = app.listen(port,() =>{
     connectDB();
     console.log(`Server ruuning at ${port}`);
 });
+
+setupSocket(server);
 
