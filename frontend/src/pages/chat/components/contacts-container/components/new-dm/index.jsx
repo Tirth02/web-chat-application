@@ -12,7 +12,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 
-import { animationDefaultOptions } from "@/lib/utils";
+import { animationDefaultOptions, getColor } from "@/lib/utils";
 import { useState } from "react";
 import { FaPlus } from "react-icons/fa";
 import { Input } from "@/components/ui/input";
@@ -96,7 +96,7 @@ const NewDM = () => {
                           <AvatarImage
                             src={`${HOST}/${contact.image}`}
                             alt="profile"
-                            className="object-cover w-full h-full bg-black"
+                            className="object-cover w-full h-full bg-black rounded-full"
                           />
                         ) : (
                           <div
