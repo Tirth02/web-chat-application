@@ -10,7 +10,7 @@ const ContactList = ({ contacts, isChannel = false }) => {
     setSelectedChatData,
     setSelectedChatType,
     selectedChatType,
-    setSelectedChatMessages,
+    setselectedChatMessages,
   } = useAppStore();
 
   const handleClick = (contact) => {
@@ -19,7 +19,7 @@ const ContactList = ({ contacts, isChannel = false }) => {
     else setSelectedChatType("contact");
     setSelectedChatData(contact);
     if (selectedChatData && selectedChatData._id !== contact._id) {
-      setSelectedChatMessages([]);
+      setselectedChatMessages([]);
     }
   };
   return (
