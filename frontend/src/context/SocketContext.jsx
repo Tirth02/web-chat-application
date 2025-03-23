@@ -24,7 +24,7 @@ export const SocketProvider = ({ children }) => {
       });
 
       const handleRecieveMessage = (message) => {
-        const { selectedChatType, selectedChatData, addMessage } =
+        const { selectedChatType, selectedChatData, addMessage,addContactsInDMContacts } =
           useAppStore.getState();
 
         // it is used to check particular user chat suppose meet talks to radhika then when messagecontainer of tirth opens it should not show the messages of meet and radhika
@@ -33,19 +33,19 @@ export const SocketProvider = ({ children }) => {
           (selectedChatData._id === message.sender._id ||
             selectedChatData._id === message.recipient._id)
         ) {
-            console.log("Button hit");
-            console.log("message rcv",message);
             addMessage(message);
         }
+        addContactsInDMContacts(message);
       };
 
       const handleRecieveChannelMessage = (message) =>{
-        const {selectedChatData, selectedChatType, addMessage} = useAppStore.getState();
+        const {selectedChatData, selectedChatType, addMessage,addChannelInChannelList} = useAppStore.getState();
         
         if(selectedChatType !== undefined && selectedChatData._id ===message.channelId)
         {
           addMessage(message);
         }
+        addChannelInChannelList(message);
       }
 
       socket.current.on("recieveMessage", handleRecieveMessage);
